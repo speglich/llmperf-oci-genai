@@ -6,6 +6,7 @@ from llmperf.ray_clients.openai_chat_completions_client import (
 from llmperf.ray_clients.sagemaker_client import SageMakerClient
 from llmperf.ray_clients.vertexai_client import VertexAIClient
 from llmperf.ray_llm_client import LLMClient
+from llmperf.ray_clients.oci_client import OCIGenAIChatCompletionsClient
 
 
 SUPPORTED_APIS = ["openai", "anthropic", "litellm"]
@@ -28,6 +29,8 @@ def construct_clients(llm_api: str, num_clients: int) -> List[LLMClient]:
         clients = [SageMakerClient.remote() for _ in range(num_clients)]
     elif llm_api == "vertexai":
         clients = [VertexAIClient.remote() for _ in range(num_clients)]
+    elif llm_api == "oci":
+        clients = [OCIGenAIChatCompletionsClient.remote() for _ in range(num_clients)]
     elif llm_api in SUPPORTED_APIS:
         clients = [LiteLLMClient.remote() for _ in range(num_clients)]
     else:
